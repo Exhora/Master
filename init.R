@@ -5,8 +5,10 @@ require(kernlab)
 
 pos = which(funcIdade < 30 & dxGroup == 2)
 
-dados = dataset[pos]
+dados = dataset[pos,,]
 
 media_dados = colMeans(dados)
 
 value = specc(media_dados, 5) #usando 5 clusters
+
+

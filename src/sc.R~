@@ -1,0 +1,206 @@
+
+specClust <- function(W, k) {
+  n <- ncol(W)
+  ## Diagonal matrix with the degrees in the main diagonal
+  D <- matrix(0, n, n)
+  for (i in 1:n) {
+    D[i,i] <- sum(abs(W[i,]))
+  }
+  ## Unnormalized Laplacian
+  L <- D - W
+  U <- (eigen(L)$vectors)[,((n-k+1):n)]
+  C <- pam(x=U, k=k)
+  return(C$clustering)
+}
+
+
+# 
+# specClust <- function(W, k) {
+#   n <- ncol(W)
+#   ## Diagonal matrix with the degrees in the main diagonal
+#   D <- matrix(0, n, n)
+#   for (i in 1:n) {
+#     D[i,i] <- sum(abs(W[i,]))
+#   }
+#   ## Unnormalized Laplacian
+#   L <- D - W
+#   U <- (eigen(L)$vectors)[,((n-k+1):n)]
+#   C <- kmeans(U, k)
+#   for (i in 1:50) {
+#     tmp <- kmeans(U, k)
+#     if(tmp$betweenss/tmp$totss > C$betweenss/C$totss) {
+#       C <- tmp
+#     }
+#   }
+#   return(C$cluster)
+# }
+
+
+
+#Funcao para clusterizacao espectral
+#
+# ENTRADA
+# H: matriz NxN de similaridades
+# r: numero de clusters
+# maxIter: numero maximo de iteracoes para o k-means (padrao 100)
+# nStart: numero de repeticoes iniciais de sorteio dos centros (padrao 50)
+#
+# SAIDA
+# res: vetor 1xN com os labels identificando o cluster que cada item pertence
+
+
+# specClust <- function(H, r, maxIter=200, nStart = 20){
+#   
+#   S = rowSums(H)  
+#   D = diag(S) #diagonal i de D eh igual a soma da i-esima linha de H.
+#   
+#   Q = D - H
+#   
+#   z = eigen(Q)
+# 
+#   V = z$vectors[ , (dim(Q)[1]-r+1):(dim(Q)[1])]
+#   
+#   res = kmeans(V, r, iter.max = maxIter, nstart = nStart)$cluster
+# 
+#   return(res)
+#   
+# }
+
+# 
+# specClust <- function(H, r, maxIter=100, nStart = 50){
+#   
+#   S = rowSums(H)  
+#   D = diag(S) #diagonal i de D eh igual a soma da i-esima linha de H.
+#   
+#   Q = D - H
+#   
+#   z = eigen(Q)
+#   #   V = z$vectors[ , (dim(Q)[1]-r+1):(dim(Q)[1])]
+#   V = z$vectors[ , 1:r]
+#   
+# #   res = kmeans(V, r, iter.max = maxIter, nstart = nStart)$cluster
+#   
+#   nTentativas = 50
+#   labelList = array(NA, c(nTentativas, dim(H)[1]))
+#   totWithinss = array(NA, nTentativas)
+#   for (i in seq(nTentativas)){
+#     res = kmeans(V, r, iter.max = maxIter)
+#     labelList[i, ] = res$cluster
+#     totWithinss[i] = res$tot.withinss
+#   }
+#   retorno = which.min(totWithinss)
+#   res = labelList[retorno, ]
+#   
+#   return(res)
+#   
+# }
+# 
+# # 
+# # specClust <- function(H, r, maxIter=100, nStart = 50){
+# #   
+# #   S = rowSums(H)  
+# #   D = diag(S) #diagonal i de D eh igual a soma da i-esima linha de H.
+# #   
+# #   Q = D - H
+# #   
+# # #   Q1 = Q
+# #   Q1 = exp(-1*Q)/.5
+# # #   Q1 = exp(-1*Q)
+# #   #   z = eigen(Q)
+# #   z<-eigen(Q1)
+# #   #     V = z$vectors[ , (dim(Q)[1]-r+1):(dim(Q)[1])]
+# #   V = z$vectors[ , 1:r]
+# #   
+# #   #   res = kmeans(V, r, iter.max = maxIter, nstart = nStart)$cluster
+# #   res = kmeans(V, r, iter.max = maxIter, nstart = nStart)$cluster
+# #   
+# # #   nTentativas = 50
+# # #   labelList = array(NA, c(nTentativas, dim(H)[1]))
+# # #   totWithinss = array(NA, nTentativas)
+# # #   for (i in seq(nTentativas)){
+# # #     res = kmeans(V, r, iter.max = maxIter)
+# # #     labelList[i, ] = res$cluster
+# # #     totWithinss[i] = res$tot.withinss
+# # #   }
+# # #   retorno = which.min(totWithinss)
+# # #   res = labelList[retorno, ]
+# #   #   
+# #   return(res)
+# #   
+# # }
+# # 
+# # #versao x2
+# # 
+# # 
+# # A = d
+# # S = rowSums(A)  
+# # D = diag(S) #diagonal i de D eh igual a soma da i-esima linha de H.
+# # 
+# # L = D - A
+# # 
+# # D1 = D ^ -0.5
+# # D1[is.infinite(D1)] = 0
+# # LS1 = D1 %*% L %*% D1
+# # 
+# # 
+# # LS2 = diag(dim(A)[1]) - D1 %*% A %*% D1
+# # 
+# # sum(LS1 != LS2)
+# # 
+# # Di = solve(diag(sqrt(diag(D))))
+# # 
+# # 
+# # 
+# Versao normalizada
+# specClust <- function(A, k, maxIter=200, nStart = 20){
+#   
+#   S = rowSums(A)  
+#   D = diag(S) #diagonal i de D eh igual a soma da i-esima linha de H.
+#   
+#   L = D - A
+#   
+#   D1 = D ^ -0.5
+#   D1[is.infinite(D1)] = 0
+#   Lsym = D1 %*% L %*% D1 #Laplaciana simetrica
+# #   Lsym[is.na(Lsym)] = 0
+#   
+#   V = eigen(Lsym)$vectors[ , ((dim(A)[1]-k+1):dim(A)[1])]
+#   
+#   #normalizacao Laplaciana simetrica
+#   nV = array(NA, dim(V))
+#   for (i in seq(dim(V)[1])){
+#     sLinha = sum(V[i, ] ^ 2)
+#     sqLinha = sqrt(sLinha)
+#     for(j in seq(dim(V)[2])){
+#       nV[i,j] = V[i,j] / (sqLinha)
+#     }
+#   }
+#   
+#   nV2 = array(NA, dim(V))
+#   rs = rowSums(V)
+#   nV2 = V / rs
+#   
+#   
+# #   nTentativas = 50
+# #   labelList = array(NA, c(nTentativas, dim(A)[1]))
+# #   totWithinss = array(NA, nTentativas)
+# #   for (i in seq(nTentativas)){
+# #     res = kmeans(nV2, k, iter.max = maxIter, nstart = k)
+# #     labelList[i, ] = res$cluster
+# # #     totWithinss[i] = res$tot.withinss
+# #     totWithinss[i] = res$betweenss / res$totss
+# #   }
+# #   retorno = which.min(totWithinss)
+# #   res = labelList[retorno, ]
+#   
+# #   res = kmeans(nV2, k, iter.max = maxIter, nstart = nStart)$cluster,
+#   
+#   nV2[is.na(nV2)] = 0
+#   
+#   res = kmeans(nV2, k, iter.max = maxIter)$cluster
+#   
+#   return(res)
+#   
+# }
+# 
+# #versao 55 
