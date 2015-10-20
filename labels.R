@@ -24,7 +24,7 @@ pos = which(funcIdade < 30 & dxGroup == 1)
 media = matFDR(z2p(colMeans(dataset[pos, , ])))
 
 #eh 1 - media porque eh a matriz de dissimilaridade?
-labels = specClust(1 - media, 5)
+labels = specClust(1 - media, 6)
 
 save(labels, file = 'labelsSemScrubbing_5clusters.RData')
 
