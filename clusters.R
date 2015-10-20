@@ -1,15 +1,15 @@
-dadosz = p2z(dados)
-
 labels1 = NULL
 labels2 = NULL
 labels3 = NULL
 labels4 = NULL
 labels5 = NULL
+labels6 = NULL
 l1 = 1;
 l2 = 1;
 l3 = 1;
 l4 = 1;
 l5 = 1;
+l6 = 1;
 
 for(i in 1:316){
 	if(labels[i] == 1){
@@ -29,7 +29,11 @@ for(i in 1:316){
 	}else if (labels[i] == 5){
 		labels5[l5] = i;
 		l5 = l5+1;
+	}else if (labels[i] == 6){
+		labels6[l6] = i;
+		l6 = l6+1;
 	}
+
 }
 
 cluster1 = array(dim = c(dim(dados)[1],length(labels1), length(labels1)))
@@ -37,7 +41,7 @@ cluster1 = array(dim = c(dim(dados)[1],length(labels1), length(labels1)))
 for(i in 1:dim(dados)[1]){
 	for(j in 1:length(labels1)){
 		for(k in 1:length(labels1)){
-			cluster1[i,j, k] = dadosz[i, labels1[j], labels1[k]];
+			cluster1[i,j, k] = dados[i, labels1[j], labels1[k]];
 		}
 	}
 }
@@ -46,7 +50,7 @@ cluster2 = array(dim = c(dim(dados)[1],length(labels2), length(labels2)))
 for(i in 1:dim(dados)[1]){
 	for(j in 1:length(labels2)){
 		for(k in 1:length(labels2)){
-			cluster2[i,j, k] = dadosz[i, labels2[j], labels2[k]];
+			cluster2[i,j, k] = dados[i, labels2[j], labels2[k]];
 		}
 	}
 }
@@ -55,7 +59,7 @@ cluster3 = array(dim = c(dim(dados)[1],length(labels3), length(labels3)))
 for(i in 1:dim(dados)[1]){
 	for(j in 1:length(labels3)){
 		for(k in 1:length(labels3)){
-			cluster3[i,j, k] = dadosz[i, labels3[j], labels3[k]];
+			cluster3[i,j, k] = dados[i, labels3[j], labels3[k]];
 		}
 	}
 }
@@ -64,7 +68,7 @@ cluster4 = array(dim = c(dim(dados)[1],length(labels4), length(labels4)))
 for(i in 1:dim(dados)[1]){
 	for(j in 1:length(labels4)){
 		for(k in 1:length(labels4)){
-			cluster4[i,j, k] = dadosz[i, labels4[j], labels4[k]];
+			cluster4[i,j, k] = dados[i, labels4[j], labels4[k]];
 		}
 	}
 }
@@ -73,8 +77,16 @@ cluster5 = array(dim = c(dim(dados)[1],length(labels5), length(labels5)))
 for(i in 1:dim(dados)[1]){
 	for(j in 1:length(labels5)){
 		for(k in 1:length(labels5)){
-			cluster5[i,j, k] = dadosz[i, labels5[j], labels5[k]];
+			cluster5[i,j, k] = dados[i, labels5[j], labels5[k]];
 		}
 	}
 }
-
+cluster6 = array(dim = c(dim(dados)[1],length(labels6), length(labels6)))
+#copiar cada cluster separadamente
+for(i in 1:dim(dados)[1]){
+	for(j in 1:length(labels6)){
+		for(k in 1:length(labels6)){
+			cluster6[i,j, k] = dados[i, labels6[j], labels6[k]];
+		}
+	}
+}
