@@ -26,5 +26,5 @@ media = matFDR(z2p(colMeans(dataset[pos, , ])))
 
 labels = specClust(1 - media, 6)
 
-save(labels, file = 'labelsSemScrubbing_5clusters.RData')
+save(labels, file = 'labelsSemComScrubbing_5clusters.RData')
 
