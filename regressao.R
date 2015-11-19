@@ -1,8 +1,16 @@
-Idade = funcIdade[pos]
 Sexo = funcSexo[pos]
-summary(lm(MaiorAutovalor1~Idade+Sexo))
-summary(lm(MaiorAutovalor2~Idade+Sexo))
-summary(lm(MaiorAutovalor3~Idade+Sexo))
-summary(lm(MaiorAutovalor4~Idade+Sexo))
-summary(lm(MaiorAutovalor5~Idade+Sexo))
-summary(lm(MaiorAutovalor6~Idade+Sexo))
+
+maxAuto = 5
+
+sink("regression.txt")
+for(i in 1:numClusters){
+	for(j in 1:dim(autoValores[[i]])[2]){
+		lr = summary(lm(autoValores[[i]][,j] ~ Idade + Sexo))
+		if(lr[[4]][11] < 0.05){
+			print("Cluster:"); print(i)
+			print("Autovalor:"); print(j)
+			print(lr)
+		}	
+	}
+}
+sink()
