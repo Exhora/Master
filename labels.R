@@ -22,4 +22,3 @@ for (i in 1:length(pos)) {
 	dados[i,,] = matFDR(z2p(dataset[pos[i],,]))
 }
 
-
