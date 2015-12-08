@@ -1,30 +1,10 @@
-# Este exemplo mostra como gerar labels para as ROIs
-# Ou seja, como clusterizar as ROIs por clusterização espectral em um número definido de clusters
-
-#-----------------------------------------------------------------#
-
-rm(list = ls())
-
-library("cluster")
-library("Hmisc")
-
-source('src/pv.R')
-source('src/sc.R')
-source('src/matFDR.R')
-
-#-----------------------------------------------------------------#
-
-#usando o arquivo sem scrubbing
-load('zv_sfnwmrda_cc400_tc100_SITEdxGroup_spCorr.RData')
-load("phenotypeComplete.RData")
-
-# Rede media dos controles (dxGroup == 1)
+# Rede media dos controles
 # se voce quisesse poderia gerar para apenas uma pessoa, para apenas os controles, etc.
 # A rede media está sendo corrigida por fdr (matFDR) após transformação para pvalor (z2p)
-pos = which(phenotype$DX_GROUP == 2)
 media = matFDR(z2p(colMeans(dataset[pos, , ])))
 
-labels = specClust(1 - media, 6)
+labels = specClust(1 - media, numClusters)
 
-save(labels, file = 'labelsSemComScrubbing_5clusters.RData')
+fileName = paste(c("labelsComScrubbing_", numClusters, "clusters.RData"), sep="", collapse="")
+save(labels, file = fileName)
 
