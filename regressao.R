@@ -1,4 +1,3 @@
-Sexo = funcSexo[pos]
 
 maxAuto = 5
 

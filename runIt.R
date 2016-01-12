@@ -17,7 +17,7 @@ load("phenotypeComplete.RData")
 
 outliers = c(535, 614, 623, 624, 627, 629, 678, 688, 694, 698, 700, 701, 725, 732, 751, 756, 760, 766)
 
-pos = which(dxGroup == 1 | dxGroup == 2 & dxGroup[!dxGroup %in% outliers])
+pos = which(dxGroup != 3 & dxGroup[!dxGroup %in% outliers])
 
 
 dados = array(dim=c(length(pos), 316, 316))
@@ -28,6 +28,8 @@ for (i in 1:length(pos)) {
 }
 
 Idade = funcIdade[pos]
+Sexo =  phenotype$SEX[pos]
+Grupo = dxGroup[pos]-1
 
 numClusters = 5
 
