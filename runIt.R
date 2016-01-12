@@ -19,8 +19,11 @@ outliers = c(535, 614, 623, 624, 627, 629, 678, 688, 694, 698, 700, 701, 725, 73
 
 pos = which(dxGroup != 3 & dxGroup[!dxGroup %in% outliers])
 
-
 dados = array(dim=c(length(pos), 316, 316))
+grupo = dxGroup[pos]
+normais = which(grupo == 1)
+autistas = which(grupo == 2)
+
 
 # passa todos os individuos para p-valor e corrige por FDR
 for (i in 1:length(pos)) {

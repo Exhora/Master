@@ -1,4 +1,3 @@
-
 maxAuto = 5
 
 sink("regression.txt")
@@ -13,3 +12,17 @@ for(i in 1:numClusters){
 	}
 }
 sink()
+
+normais = which(grupo == 1)
+autistas = which(grupo == 2)
+
+
+for(i in 1:numClusters){
+	lr1 = summary(lm(autoValores[[i]][normais, 1] ~ Idade[normais] + Sexo[normais]))
+	lr2 = summary(lm(autoValores[[i]][autistas, 1] ~ Idade[autistas] + Sexo[autistas]))
+	zval = (lr2[[4]][2] - lr1[[4]][2])/(sqrt((lr1[[4]][5])^2 + (lr2[[4]][5])^2))
+	pval = z2p(zval)
+	print(pval)
+}
+
+ 
